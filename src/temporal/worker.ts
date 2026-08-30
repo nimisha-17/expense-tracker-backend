@@ -1,13 +1,19 @@
 import { NativeConnection, Worker } from "@temporalio/worker";
 import connectDatabase from "../config/database";
 import * as activities from "./activities";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 async function run(): Promise<void> {
   await connectDatabase();
 
-  const connection = await NativeConnection.connect({
-    address: "localhost:7233"
-  });
+  const temporalAddress =
+  process.env.TEMPORAL_ADDRESS || "localhost:7233";
+
+const connection = await NativeConnection.connect({
+  address: temporalAddress
+});
 
   const worker = await Worker.create({
     connection,

@@ -44,6 +44,34 @@ services:
     ports:
       - "8080:8080"
 
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: expense-tracker-backend
+    ports:
+      - "4000:4000"
+    environment:
+      PORT: 4000
+      MONGODB_URI: mongodb://mongodb:27017/expense-tracker
+      TEMPORAL_ADDRESS: temporal:7233
+    depends_on:
+      - mongodb
+      - temporal
+
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: expense-tracker-worker
+    command: npm run worker
+    environment:
+      MONGODB_URI: mongodb://mongodb:27017/expense-tracker
+      TEMPORAL_ADDRESS: temporal:7233
+    depends_on:
+      - mongodb
+      - temporal
+
 volumes:
 
   mongodb_data:

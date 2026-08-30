@@ -1,8 +1,17 @@
 import mongoose from "mongoose";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const connectDatabase = async (): Promise<void> => {
   try {
-    await mongoose.connect("mongodb://localhost:27017/expense-tracker");
+    const mongoUri = process.env.MONGODB_URI;
+
+    if (!mongoUri) {
+      throw new Error("MONGODB_URI is not defined.");
+    }
+
+    await mongoose.connect(mongoUri);
 
     console.log("MongoDB connected successfully.");
   } catch (error) {

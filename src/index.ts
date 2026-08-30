@@ -1,14 +1,17 @@
 import express from "express";
+import dotenv from "dotenv";
 import connectDatabase from "./config/database";
 import expenseRoutes from "./routes/expense.routes";
 import { getTemporalClient } from "./temporal/client";
 import type { CreateExpenseInput } from "./temporal/types";
 
+dotenv.config();
+
 const app = express();
 
 app.use(express.json());
 
-const PORT = 4000;
+const PORT = Number(process.env.PORT) || 4000;
 
 app.get("/", (req, res) => {
   res.json({
